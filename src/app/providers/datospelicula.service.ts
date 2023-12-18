@@ -9,7 +9,7 @@ import { Pelicula } from '../interfaz/pelicula';
 })
 
 export class DatospeliculaService {
-  private apiUrl = 'http://www.omdbapi.com';
+  private apiUrl = 'https://cors-anywhere.herokuapp.com/http://www.omdbapi.com';
   private apiKey = '14f06f65'; // Reemplaza con tu clave de API real
 
 
