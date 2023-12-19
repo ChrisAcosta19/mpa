@@ -23,4 +23,5 @@ export interface Pelicula {
   Production: string
   Website: string
   Response: string
+  [key: string]: any
 }

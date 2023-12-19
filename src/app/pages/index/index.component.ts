@@ -15,6 +15,7 @@ import { DatospeliculaService } from '../../providers/datospelicula.service'
   templateUrl: './index.component.html',
   styleUrl: './index.component.css'
 })
+
 export class IndexComponent implements OnInit {
   movieIds: string[] = ['tt0111161', 'tt0468569', 'tt1375666', 'tt0137523',
    'tt0109830', 'tt0167260', 'tt0110912', 'tt0120737',
