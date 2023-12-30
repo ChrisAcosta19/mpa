@@ -7,6 +7,10 @@ import { Pelicula } from '../../interfaz/pelicula';
 //Importación del servicio
 import { DatospeliculaService } from '../../providers/datospelicula.service'
 
+import { Chart, registerables } from 'chart.js';
+// Registrar los módulos necesarios de Chart.js
+Chart.register(...registerables);
+
 @Component({
   selector: 'app-shop',
   standalone: true,
@@ -17,15 +21,16 @@ import { DatospeliculaService } from '../../providers/datospelicula.service'
 })
 
 export class ShopComponent implements OnInit {
-  movieIds: string[] = ['tt0111161','tt0068646','tt0468569','tt0071562','tt0047478',
-'tt0108052','tt0167260','tt0110912','tt0120737','tt0060196',
-'tt0109830','tt0137523','tt0167261','tt1375666','tt0080684',
-'tt0133093','tt0099685','tt0073486','tt0114369','tt0038650'];
+  movieIds: string[] = ['tt0111161', 'tt0068646', 'tt0468569', 'tt0071562', 'tt0047478',
+    'tt0108052', 'tt0167260', 'tt0110912', 'tt0120737', 'tt0060196',
+    'tt0109830', 'tt0137523', 'tt0167261', 'tt1375666', 'tt0080684',
+    'tt0133093', 'tt0099685', 'tt0073486', 'tt0114369', 'tt0038650'];
 
-//Atributo con el tipo de dato de la interfaz
-  public data : Pelicula[] = [];
+  //Atributo con el tipo de dato de la interfaz
+  public data: Pelicula[] = [];
   public currentSortColumn: string = '';
   public isSortAscending: boolean = false;
+  public chart: any; // Variable para almacenar la referencia al gráfico
 
   //Inyección de dependencia del servicio
   constructor(private dataProvider: DatospeliculaService) { }
@@ -34,6 +39,41 @@ export class ShopComponent implements OnInit {
   ngOnInit(): void {
     this.dataProvider.getMoviesByIds(this.movieIds).subscribe((movies) => {
       this.data = movies;
+      this.createChart();
+    });
+  }
+
+  createChart(): void {
+    const years = this.data.map(movie => movie.Year);
+    const uniqueYears = Array.from(new Set(years));
+
+    const movieCountByYear = uniqueYears.map(year => {
+      return years.filter(movieYear => movieYear === year).length;
+    });
+
+    this.chart = new Chart('canvas', {
+      type: 'bar',
+      data: {
+        labels: uniqueYears.map(String),
+        datasets: [{
+          label: 'Número de películas por año',
+          data: movieCountByYear,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          x: {
+            type: 'linear',
+            position: 'bottom'
+          },
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
     });
   }
 
